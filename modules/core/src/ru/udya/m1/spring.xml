@@ -5,4 +5,25 @@
     <!-- Annotation-based beans -->
     <context:component-scan base-package="ru.udya.m1"/>
 
+    <bean id="cuba_ServerSorter" class="com.haulmont.cuba.core.sys.remoting.discovery.RandomServerSorter"/>
+
+    <bean id="hse_auth" class="com.haulmont.cuba.core.sys.remoting.RemoteProxyBeanCreator">
+        <property name="serverSelector">
+            <bean class="com.haulmont.cuba.core.sys.remoting.discovery.StaticServerSelector"
+                  init-method="init">
+                <property name="baseUrl" value="http://localhost:8080/auth-core"/>
+                <property name="serverSorter" ref="cuba_ServerSorter"/>
+                <property name="servletPath" value="remoting"/>
+            </bean>
+        </property>
+        <property name="remoteServices">
+            <map>
+                <entry key="cuba_AuthenticationService" value="com.haulmont.cuba.security.auth.AuthenticationService"/>
+                <entry key="cuba_UserSettingService" value="com.haulmont.cuba.security.app.UserSettingService"/>
+                <entry key="cuba_AccessGroupsService" value="com.haulmont.cuba.security.group.AccessGroupsService"/>
+                <entry key="cuba_RolesService" value="com.haulmont.cuba.security.role.RolesService"/>
+                <entry key="cuba_UserManagementService" value="com.haulmont.cuba.security.app.UserManagementService"/>
+            </map>
+        </property>
+    </bean>
 </beans>
